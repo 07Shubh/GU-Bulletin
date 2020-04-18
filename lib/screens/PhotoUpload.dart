@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:gu_bulletin/screens/home.dart';
 
 class UploadPhotoImage extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class UploadPhotoImage extends StatefulWidget {
 
 class _UploadPhotoImageState extends State<UploadPhotoImage> {
   File sampleImage;
-  String _myValue;
+  String _myValue, url;
   final formKey = GlobalKey<FormState>();
 
   Future getImage() async{
@@ -35,10 +36,46 @@ class _UploadPhotoImageState extends State<UploadPhotoImage> {
 
   void uploadStatusImage() async{
     if(validateAndSave()){
+      final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Post Images");
+      var timeKey = DateTime.now();
+      final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString()+".jpg").putFile(sampleImage);
+      var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+      url = ImageUrl.toString();
+      print("Image URL = " + url);
 
+      goToHomePage();
+      saveToDatabase(url);
     }
   }
 
+  void saveToDatabase(url){
+    var dbTimeKey = DateTime.now();
+    var formatDate = DateFormat('MMM d, yyyy');
+    var formatTime = DateFormat('EEEE, hh:mm aaa');
+    String date = formatDate.format(dbTimeKey);
+    String time = formatTime.format(dbTimeKey);
+
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+
+    var data = {
+      'image': url,
+      'description': _myValue,
+      'date': date,
+      'time': time,
+    };
+    
+    ref.child("Posts").push().set(data);
+  }
+
+  void goToHomePage(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context){
+          return Home();
+        }
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
