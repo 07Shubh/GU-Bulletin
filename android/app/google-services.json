@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "860558056792",
+    "firebase_url": "https://gubulletin.firebaseio.com",
+    "project_id": "gubulletin",
+    "storage_bucket": "gubulletin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860558056792:android:0c45402499e291269a192d",
+        "android_client_info": {
+          "package_name": "guBulletin.pbl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860558056792-bqg6ht4u2q03m7m2h4ajsm0l73ofvmkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "guBulletin.pbl",
+            "certificate_hash": "fb7b6e71f2d0a917b0e6888bb7a18f07a74f72f1"
+          }
+        },
+        {
+          "client_id": "860558056792-lbn5vqogdg4cpsdmc85g2tbgmskga3gq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAQarlXNJWee6hQvU20sSqlPEzlfIPCd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860558056792-lbn5vqogdg4cpsdmc85g2tbgmskga3gq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
