@@ -89,8 +89,10 @@ class _UploadPhotoImageState extends State<UploadPhotoImage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: getImage,
+        backgroundColor: Colors.blue,
         tooltip: 'Add Image from Gallery',
-        child: Icon(Icons.add_a_photo),
+        child: Icon(Icons.collections),
+        splashColor: Colors.blue,
       ),
     );
   }
@@ -106,7 +108,7 @@ class _UploadPhotoImageState extends State<UploadPhotoImage> {
             TextFormField(
               decoration: InputDecoration(labelText: 'Description'),
               validator: (value){
-                return value.isEmpty?'Blogg description is required':null;
+                return value.isEmpty?'Description is required':null;
               },
               onSaved: (value){
                 return _myValue = value;

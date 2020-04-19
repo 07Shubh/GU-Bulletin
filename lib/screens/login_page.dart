@@ -107,7 +107,7 @@ void validateAndSubmit()async{
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("No Interet"),
+          title: Text("No Internet"),
           content: Text("Check your internet connection"),
         )
       );

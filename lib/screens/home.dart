@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gu_bulletin/screens/PhotoUpload.dart';
 import 'package:intl/intl.dart';
 import '../mapping.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:gu_bulletin/authentication.dart';
 import 'package:gu_bulletin/screens/PhotoUpload.dart';
 import 'package:gu_bulletin/Posts.dart';
+import 'package:gu_bulletin/dialogbox.dart';
 
 class Home extends StatefulWidget {
   Home({
@@ -23,6 +25,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Posts> postsList = [];
+  DialogBox dialogBox = DialogBox();
+  String _locationMessage;
 
   @override
   void initState() {
@@ -51,6 +55,14 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _getCurrentLocation() async{
+    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    setState(() {
+      _locationMessage = '${position.latitude}, ${position.longitude}';
+    });
+    dialogBox.information(context, "Location", "$_locationMessage");
+  }
+
 
   void _logoutUser() async {
     try {
@@ -72,17 +84,36 @@ class _HomeState extends State<Home> {
       ),
       drawer: Drawer(
         child: Container(
-          child: Column(
+          child: ListView(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 50.0),
+              UserAccountsDrawerHeader(
+                accountName: Text("Test"),
+                accountEmail: Text("test123@abc.com"),
+                currentAccountPicture: CircleAvatar(
+                  child: Image.network('https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png'),
+                ),),
+              ListTile(
+                leading: Icon(Icons.file_upload),
+                title: Text('Upload'),
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return UploadPhotoImage();
+                      })
+                  );
+                },
               ),
-              MaterialButton(
-                child: ListTile(
-                  title: Text('SignOut'),
-                  //onTap: _logoutUser,
-                ),
-                onPressed: _logoutUser,
+              ListTile(
+                leading: Icon(Icons.location_searching),
+                title: Text('Emergency'),
+                onTap: (){_getCurrentLocation();},
+              ),
+
+              ListTile(
+                leading: Icon(Icons.arrow_left),
+                title: Text('SignOut', style: TextStyle(fontWeight: FontWeight.bold),),
+                onTap: _logoutUser,
               )
             ],
           ),
@@ -91,12 +122,12 @@ class _HomeState extends State<Home> {
       floatingActionButton:
       Container(
         child: FloatingActionButton(
-          child: Icon(Icons.add,),
+          child: Icon(Icons.add_a_photo,),
           tooltip: 'Upload a post',
           autofocus: true,
           clipBehavior: Clip.antiAlias,
           elevation: 5.0,
-          splashColor: Colors.indigo,
+          splashColor: Colors.blue,
           backgroundColor: Colors.blue,
           onPressed: () {
             Navigator.push(
@@ -174,7 +205,12 @@ class _HomeState extends State<Home> {
                         width: 40.0,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blue
+                            color: Colors.blue,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png'
+                              )
+                            ),
                         ),
                       ),
                       SizedBox(width: 10.0,),
@@ -220,7 +256,7 @@ class _HomeState extends State<Home> {
               child: Text(description, style: Theme.of(context).textTheme.subtitle,),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top: 5.0, bottom: 16.0, left: 16.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -230,6 +266,11 @@ class _HomeState extends State<Home> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.blue,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png'
+                          )
+                      ),
                     ),
                   ),
                   SizedBox(width: 10.0,),
