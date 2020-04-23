@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gu_bulletin/screens/Loading.dart';
 import 'package:gu_bulletin/screens/PhotoUpload.dart';
 import 'package:intl/intl.dart';
 import '../mapping.dart';
@@ -27,6 +28,7 @@ class _HomeState extends State<Home> {
   List<Posts> postsList = [];
   DialogBox dialogBox = DialogBox();
   String _locationMessage;
+  bool loading = false;
 
   @override
   void initState() {
@@ -56,17 +58,22 @@ class _HomeState extends State<Home> {
   }
 
   void _getCurrentLocation() async{
+    setState(() => loading = true);
     final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     setState(() {
       _locationMessage = '${position.latitude}, ${position.longitude}';
     });
+    setState(() => loading = false);
     dialogBox.information(context, "Location", "$_locationMessage");
+
   }
 
 
   void _logoutUser() async {
     try {
+      setState(() => loading = true);
       await widget.auth.signOut();
+      setState(() => loading = false);
       widget.onSignedOut();
     } catch (e) {
       print(e.toString());
@@ -140,7 +147,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: Container(
-        child: postsList.length ==0? Text('No news available at the moment'): ListView.builder(
+        child: postsList.length ==0 ? Loading(): ListView.builder(
             itemCount: postsList.length,
             itemBuilder: (_,index){
               return PostsUI(postsList[index].image, postsList[index].date, postsList[index].time, postsList[index].description);

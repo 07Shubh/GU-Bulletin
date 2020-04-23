@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:gu_bulletin/screens/Loading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class UploadPhotoImage extends StatefulWidget {
 class _UploadPhotoImageState extends State<UploadPhotoImage> {
   File sampleImage;
   String _myValue, url;
+  bool loading = false;
   final formKey = GlobalKey<FormState>();
 
   Future getImage() async{
@@ -36,16 +38,17 @@ class _UploadPhotoImageState extends State<UploadPhotoImage> {
 
   void uploadStatusImage() async{
     if(validateAndSave()){
+      setState(() => loading = true);
       final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Post Images");
       var timeKey = DateTime.now();
       final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString()+".jpg").putFile(sampleImage);
       var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
       url = ImageUrl.toString();
       print("Image URL = " + url);
-
       goToHomePage();
       saveToDatabase(url);
     }
+    setState(() => loading = false);
   }
 
   void saveToDatabase(url){
@@ -98,7 +101,7 @@ class _UploadPhotoImageState extends State<UploadPhotoImage> {
   }
 
   Widget enableUpload(){
-    return Container(
+    return loading? Loading(): Container(
       child: Form(
         key: formKey,
         child: ListView(

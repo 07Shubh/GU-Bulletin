@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gu_bulletin/authentication.dart';
 import 'package:gu_bulletin/dialogbox.dart';
+import 'package:gu_bulletin/screens/Loading.dart';
 import 'package:gu_bulletin/screens/home.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
@@ -28,7 +29,8 @@ class _LoginPageState extends State<LoginPage>
 
   DialogBox dialogBox = DialogBox();
   final _formType = FormType.login;
-  String _email="", _password="";
+  String email="", _password="";
+  bool loading = false;
 
   StreamSubscription<DataConnectionStatus> listener;
 
@@ -81,16 +83,21 @@ class _LoginPageState extends State<LoginPage>
     }
 }
 void validateAndSubmit()async{
+
     DataConnectionStatus status = await checkInternet();
+    setState(() => loading = true);
     if(status == DataConnectionStatus.connected) {
+      setState(() => loading = false);
       if (validateAndSave()) {
         try {
           if (_formType == FormType.login) {
-            String userId = await widget.auth.signIn(_email, _password);
+            setState(() => loading = true);
+            String userId = await widget.auth.signIn(email, _password);
             //dialogBox.information(context, "Congratulations", "You are logged in successfully!");
             print("login user ID" + userId);
           }
           else {
+            setState(() => loading = false);
             dialogBox.information(context, "Invalid Username or Password", "");
             print("Invalid ID or password");
           }
@@ -98,12 +105,15 @@ void validateAndSubmit()async{
         }
 
         catch (e) {
+          setState(() => loading = true);
           dialogBox.information(context, "Error: ", e.toString());
           print("Error:" + e.toString());
+          setState(() => loading = false);
         }
       }
     }
     else{
+      setState(() => loading = true);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -111,10 +121,9 @@ void validateAndSubmit()async{
           content: Text("Check your internet connection"),
         )
       );
+      setState(() => loading = false);
     }
-
 }
-
 
   //design
   AnimationController _iconanimationController;
@@ -150,7 +159,7 @@ void validateAndSubmit()async{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading? Loading() : Scaffold(
       //resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.expand,
@@ -194,7 +203,7 @@ void validateAndSubmit()async{
                                   return 'Please enter the Email';
                                 }
                               },
-                              onSaved: (input) => _email = input,
+                              onSaved: (input) => email = input,
                               decoration: InputDecoration(
                                 hintText: 'Enter username',
                                 labelText: 'Username',
@@ -235,21 +244,5 @@ void validateAndSubmit()async{
       ),
     );
   }
-/*
-  Future<void> signIn() async{
-    final formState = _formKey.currentState;
-    if(formState.validate()){
-      formState.save();
-      try{
-        dynamic result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-        if(result == null){
-          setState(() => error = 'could not sign in with these credentials');
-        }
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      }catch(e){
-        print(e.message);
-      }
-    }
-  } */
 }
 
