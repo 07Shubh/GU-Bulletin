@@ -1,16 +1,24 @@
-# gu_bulletin
+<img src="images/logo.png" width=250 class="center">
 
-A new Flutter applicatio
+# GU Bulletin
+This is a Flutter app for Galgotias University adminstrational updates                                                 
 
-## Getting Started
+# Features
+ 1. Authentic login system using firebase (only used by organisation)
+ 2. Role based access
+ 3. Uploading images option through gallery
+ 4. Blogging app like and responsive ui
+ 5. Can detect location
+ 
+# Screenshots
 
-This project is a starting point for a Flutter application.
+<img src="ss/1.png" width=250>  <img src="ss/2.png" width=250>  <img src="ss/3.png" width=250>  
 
-A few resources to get you started if this is your first Flutter project:
+<img src="ss/4.png" width=250>  <img src="ss/5.png" width=250>  <img src="ss/6.png" width=250>  
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<img src="ss/7.png" width=250>  <img src="ss/8.png" width=250>  <img src="ss/9.png" width=250>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="ss/10.png" width=250>  <img src="ss/11.png" width=250>  <img src="ss/12.png" width=250>
+
+<img src="ss/13.png" width=250>
+
