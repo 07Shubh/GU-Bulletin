@@ -10,6 +10,10 @@ This is a Flutter app for Galgotias University adminstrational updates
  4. Blogging app like and responsive ui
  5. Can detect location
  
+#To Be Implemented
+ 1. Profile 
+ 2. Chat Medium
+ 
 # Screenshots
 
 <img src="ss/1.png" width=250>  <img src="ss/2.png" width=250>  <img src="ss/3.png" width=250>  
